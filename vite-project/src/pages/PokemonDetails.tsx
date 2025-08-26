@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getPokemon } from "../lib/api";
 import { Pokemon } from "../types/pokeapi";
 import StatBar from "../components/StatBar";
+import EvolutionChain from "../components/EvolutionChain";
 
 export default function PokemonDetails() {
   const { name } = useParams<{ name: string }>();
@@ -84,6 +85,8 @@ export default function PokemonDetails() {
           </div>
         </div>
       </div>
+
+      <EvolutionChain pokemonName={pokemon.name} />
     </div>
   );
 }

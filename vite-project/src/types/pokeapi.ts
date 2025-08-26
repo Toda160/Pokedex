@@ -45,3 +45,26 @@ export type TypeResponse = {
     slot?: number;
   }[];
 };
+
+export type EvolutionChain = {
+  id: number;
+  chain: {
+    species: NamedAPIResource;
+    evolution_details: any[];
+    evolves_to: {
+      species: NamedAPIResource;
+      evolution_details: any[];
+      evolves_to: {
+        species: NamedAPIResource;
+        evolution_details: any[];
+        evolves_to: any[];
+      }[];
+    }[];
+  };
+};
+
+export type PokemonSpecies = {
+  id: number;
+  name: string;
+  evolution_chain: NamedAPIResource | null;
+};

@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import useDebounce from "../hooks/useDebounce";
+
 type TypeFilterProps = {
   value: string;
   onChange: (value: string) => void;
@@ -27,11 +30,18 @@ const POKEMON_TYPES = [
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export default function TypeFilter({ value, onChange }: TypeFilterProps) {
+  const [localValue, setLocalValue] = useState(value);
+  const debouncedValue = useDebounce(localValue, 200);
+
+  useEffect(() => {
+    onChange(debouncedValue);
+  }, [debouncedValue, onChange]);
+
   return (
     <select
       className="type-select"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
+      value={localValue}
+      onChange={(e) => setLocalValue(e.target.value)}
       aria-label="Filter by type"
     >
       <option value="">All types</option>

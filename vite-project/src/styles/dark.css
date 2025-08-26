@@ -13,10 +13,18 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  background: #1a1a1a;
   max-width: 100%;
   overflow-x: hidden;
   width: 100%;
   box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
 .title {
@@ -50,6 +58,34 @@
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  border-radius: 50%;
+  border: 1px solid #404040;
+  background: #2a2a2a;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 200ms ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-toggle:hover {
+  background: #404040;
+  border-color: #3b82f6;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .list-wrap {
@@ -146,89 +182,40 @@
   box-sizing: border-box;
 }
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 4px;
-}
-
-.page-btn {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid #404040;
-  background: #2a2a2a;
+/* Evolution Chain Styles - doar culorile specifice temei */
+.evolution-chain h3 {
   color: #ffffff;
-  transition: all 120ms ease;
 }
 
-.page-btn:hover {
-  background: #404040;
-  border-color: #3b82f6;
-}
-
-.page-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background: #1a1a1a;
-}
-
-.page-info {
-  padding: 6px 8px;
+.no-evolution {
   color: #e5e7eb;
 }
 
-/* Details page */
-.details-container {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 20px;
-  background: #1a1a1a;
-  overflow-x: hidden;
-  width: 100%;
-  box-sizing: border-box;
+.evolution-arrow {
+  color: #e5e7eb;
 }
 
-.back-btn {
-  margin-bottom: 16px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid #404040;
+.evolution-card {
   background: #2a2a2a;
-  color: #ffffff;
-  cursor: pointer;
-  transition: all 120ms ease;
+  border: 1px solid #404040;
 }
 
-.back-btn:hover {
-  background: #404040;
-  border-color: #3b82f6;
+.evolution-card-title {
+  color: #ffffff;
+}
+
+/* Details page - doar stilurile specifice temei */
+.details-container {
+  background: #1a1a1a;
 }
 
 .details-card {
   background: #2a2a2a;
-  border-radius: 14px;
-  padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   color: #ffffff;
-  max-width: 100%;
-  overflow-x: hidden;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.details-image {
-  width: 180px;
-  height: 180px;
-  object-fit: contain;
-  margin: 0 auto 14px;
-  display: block;
 }
 
 .details-title {
-  text-align: center;
-  margin: 0 0 14px;
-  font-size: 22px;
   color: #ffffff;
 }
 
@@ -251,7 +238,6 @@
 }
 
 .stat-label {
-  font-weight: 500;
   color: #ffffff;
 }
 
@@ -260,7 +246,6 @@
 }
 
 .stats-section h3 {
-  margin: 0 0 12px;
   color: #ffffff;
 }
 
@@ -277,8 +262,6 @@
 }
 
 .stat-name {
-  min-width: 80px;
-  font-size: 14px;
   color: #ffffff;
 }
 
@@ -300,117 +283,11 @@
 .details-error {
   text-align: center;
   padding: 40px;
+  color: #ffffff;
 }
 
-/* Evolution Chain - stiluri comune */
-.evolution-chain {
-  margin-top: 20px;
-  max-width: 100%;
-  overflow-x: hidden;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.evolution-chain h3 {
-  margin: 0 0 14px;
-  font-size: 18px;
-}
-
-.evolution-content {
-  min-height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 100%;
-  overflow-x: hidden;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.no-evolution {
-  text-align: center;
-  padding: 20px;
-  font-style: italic;
-}
-
-.evolution-grid {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 100%;
-  overflow-x: hidden;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.evolution-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-.evolution-arrow {
-  font-size: 32px;
-  font-weight: bold;
-}
-
-.evolution-card {
-  border-radius: 12px;
-  padding: 16px;
-  text-align: center;
-  width: 140px;
-  height: 160px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-  flex-shrink: 0;
-}
-
-.evolution-card-image {
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  margin-bottom: 8px;
-}
-
-.evolution-card-title {
-  margin: 0;
-  font-size: 14px;
-  text-align: center;
-  line-height: 1.2;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-/* Mobile responsive */
+/* Mobile responsive - doar stilurile specifice temei */
 @media (max-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-  
-  .details-container {
-    padding: 14px;
-    max-width: 100%;
-  }
-  
-  .details-card {
-    padding: 14px;
-    max-width: 100%;
-  }
-  
-  #root {
-    padding: 14px;
-  }
-  
   .evolution-grid {
     flex-direction: column;
     gap: 12px;
@@ -419,12 +296,31 @@
   .evolution-arrow {
     transform: rotate(90deg);
   }
-  
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .details-container {
+    padding: 14px;
+    max-width: 100%;
+  }
+
+  .details-card {
+    padding: 14px;
+    max-width: 100%;
+  }
+
+  #root {
+    padding: 14px;
+  }
+
   .evolution-card {
     width: 120px;
     height: 140px;
   }
-  
+
   .evolution-card-image {
     width: 80px;
     height: 80px;

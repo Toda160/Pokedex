@@ -1,5 +1,4 @@
-import { Pokemon, PokemonListPage } from "../types/pokeapi";
-import { TypeResponse } from "../types/pokeapi";
+import { Pokemon, PokemonListPage, TypeResponse, PokemonSpecies, EvolutionChain } from "../types/pokeapi";
 
 const API = "https://pokeapi.co/api/v2";
 const cache = new Map<string, unknown>();
@@ -37,3 +36,9 @@ export const getGlobalIndex = (opts?: GetJsonOpts) =>
 
 export const getType = (name: string, opts?: GetJsonOpts) =>
   getJson<TypeResponse>(`/type/${name}`, opts);
+
+export const getPokemonSpecies = (nameOrId: string | number, opts?: GetJsonOpts) =>
+  getJson<PokemonSpecies>(`/pokemon-species/${nameOrId}`, opts);
+
+export const getEvolutionChain = (id: number, opts?: GetJsonOpts) =>
+  getJson<EvolutionChain>(`/evolution-chain/${id}`, opts);

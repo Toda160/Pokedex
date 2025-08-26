@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getGlobalIndex, getPokemon, getType } from "../lib/api";
-import { NamedAPIResource, Pokemon } from "../types/pokeapi";
-import useDebounce from "./useDebounce";
+import { Pokemon } from "../types/pokeapi";
 
 type SortOption = "" | "name-asc" | "name-desc" | "weight-asc" | "weight-desc";
 
@@ -20,90 +19,65 @@ export default function usePokemonList({
   sort = "",
   pageSize = 20,
 }: UsePokemonListOptions) {
-  const [globalList, setGlobalList] = useState<NamedAPIResource[]>([]);
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [totalMatched, setTotalMatched] = useState(0);
-
-  const debouncedSearch = useDebounce(search, 300);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const controller = new AbortController();
-    (async () => {
+    async function fetchPokemon() {
       try {
         setLoading(true);
-        const data = await getGlobalIndex({ signal: controller.signal });
-        setGlobalList(data.results);
-      } catch (err) {
-        if (!(err instanceof DOMException && err.name === "AbortError")) {
-          setError(err instanceof Error ? err.message : "Unknown error");
-        }
-      } finally {
-        setLoading(false);
-      }
-    })();
-    return () => controller.abort();
-  }, []);
+        setError(null);
 
-  useEffect(() => {
-    if (!globalList.length) return;
+        const allPokemon = await getGlobalIndex();
 
-    const controller = new AbortController();
-
-    (async () => {
-      try {
-        setLoading(true);
-
-        let matched: NamedAPIResource[] = globalList.filter((p) =>
-          p.name.toLowerCase().includes(debouncedSearch.toLowerCase())
+        let filtered = allPokemon.results.filter((pokemon) =>
+          pokemon.name.toLowerCase().includes(search.toLowerCase())
         );
 
         if (typeFilter) {
-          const typeRes = await getType(typeFilter, {
-            signal: controller.signal,
-          });
-          const typeSet = new Set(typeRes.pokemon.map((x) => x.pokemon.name));
-          matched = matched.filter((p) => typeSet.has(p.name));
+          const typeData = await getType(typeFilter);
+          const typePokemonNames = new Set(
+            typeData.pokemon.map((p) => p.pokemon.name)
+          );
+          filtered = filtered.filter((pokemon) =>
+            typePokemonNames.has(pokemon.name)
+          );
         }
 
-        if (sort === "name-asc" || sort === "name-desc") {
-          matched = [...matched].sort((a, b) => {
-            const cmp = a.name.localeCompare(b.name);
-            return sort === "name-asc" ? cmp : -cmp;
-          });
-        }
+        setTotal(filtered.length);
 
-        setTotalMatched(matched.length);
+        if (sort === "name-asc") {
+          filtered.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sort === "name-desc") {
+          filtered.sort((a, b) => b.name.localeCompare(a.name));
+        }
 
         const start = (page - 1) * pageSize;
-        const pageSlice = matched.slice(start, start + pageSize);
+        const end = start + pageSize;
+        const pagePokemon = filtered.slice(start, end);
 
-        let details = await Promise.all(
-          pageSlice.map((p) =>
-            getPokemon(p.name, { signal: controller.signal })
-          )
+        const pokemonDetails = await Promise.all(
+          pagePokemon.map((pokemon) => getPokemon(pokemon.name))
         );
 
-        if (sort === "weight-asc" || sort === "weight-desc") {
-          details = [...details].sort((a, b) => {
-            const cmp = a.weight - b.weight;
-            return sort === "weight-asc" ? cmp : -cmp;
-          });
+        if (sort === "weight-asc") {
+          pokemonDetails.sort((a, b) => a.weight - b.weight);
+        } else if (sort === "weight-desc") {
+          pokemonDetails.sort((a, b) => b.weight - a.weight);
         }
 
-        setPokemonList(details);
+        setPokemonList(pokemonDetails);
       } catch (err) {
-        if (!(err instanceof DOMException && err.name === "AbortError")) {
-          setError(err instanceof Error ? err.message : "Unknown error");
-        }
+        setError(err instanceof Error ? err.message : "Eroare necunoscută");
       } finally {
         setLoading(false);
       }
-    })();
+    }
 
-    return () => controller.abort();
-  }, [globalList, debouncedSearch, typeFilter, sort, page, pageSize]);
+    fetchPokemon();
+  }, [page, search, typeFilter, sort, pageSize]);
 
-  return { pokemonList, total: totalMatched, loading, error };
+  return { pokemonList, total, loading, error };
 }
